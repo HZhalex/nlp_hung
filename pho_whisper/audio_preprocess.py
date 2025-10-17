@@ -45,15 +45,22 @@ def remove_silence_vad(audio, sr=TARGET_SR, aggressiveness=AGGRESSIVENESS):
 
 def preprocess_audio(path):
     audio, sr = sf.read(path, dtype="float32")
-    assert len(audio) > 0, "File âm thanh rỗng!"
+    assert len(audio) > 0, "File âm thanh rỗng"
+    print(f"đọc file: shape={audio.shape}, sr={sr}")
     audio = resample_and_mono(audio, sr)
+    print(f"resample+mono: shape={audio.shape}")
     audio = highpass(audio)
+    print(f"highpass: shape={audio.shape}")
     audio = pre_emphasis(audio)
+    print(f"pre-emphasis: shape={audio.shape}")
     audio = nr.reduce_noise(y=audio, sr=TARGET_SR)
+    print(f"noise reduction : shape={audio.shape}")
     audio = remove_silence_vad(audio)
-    assert len(audio) > 0, "Không phát hiện giọng nói sau khi cắt im lặng!"
+    print(f"VAD (cắt im lặng): shape={audio.shape}")
+    assert len(audio) > 0, "Không phát hiện giọng nói sau khi cắt im lặng"
     # Chuẩn hóa RMS
     rms = np.sqrt(np.mean(audio**2))
+    print(f"RMS normalize   : shape={audio.shape}")
     if rms > 0:
         audio = audio * (0.1 / rms)
     return audio
