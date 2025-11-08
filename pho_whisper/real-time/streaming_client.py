@@ -4,7 +4,7 @@ import asyncio
 import websockets
 import numpy as np
 import sounddevice as sd
-from config_2 import TARGET_SR, STREAM_CHUNK_SEC
+from config_v2 import TARGET_SR, STREAM_CHUNK_SEC
 
 async def read_chunk(stream, chunk_len):
     # chạy đọc blocking trong thread worker
